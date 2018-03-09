@@ -1,3 +1,8 @@
+# Remove Macs DS_store
+.DS_Store
+
+
+# DEFAULT PYTHON GITIGNORE
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
