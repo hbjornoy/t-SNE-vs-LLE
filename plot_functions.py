@@ -36,7 +36,7 @@ def plot_error_and_time(var, error,times,variable='variable', filename=False, er
     ax.plot(var,error,'go--')
     if (variable=="Threshold" or variable=='reg'):
         plt.xscale('log')
-    ax.set_title("t-SNE, KL divergence")
+    #ax.set_title("t-SNE, KL divergence")
     if error_type:
         ax.set_ylabel(error_type)
     else:
@@ -48,7 +48,7 @@ def plot_error_and_time(var, error,times,variable='variable', filename=False, er
         plt.xscale('log')
     ax.set_ylabel('Time')
     ax.set_xlabel('%s' %variable)
-    ax.set_title("t-SNE, Computational time")
+    #ax.set_title("t-SNE, Computational time")
     
     if filename: 
         plt.savefig(filename)
