@@ -44,7 +44,7 @@ def make_swissroll(n=1000, noise=1.0, nb_holes=0, sigma=0.4, threshold=False, ra
     
     X = X.T
     t = np.squeeze(t)
-    return X, t
+    return X, t, data_2d
 
 def make_2d_data(n, generator):
     """ generate a 2d uniformly sampled dataset"""
@@ -60,11 +60,11 @@ def transform_to_3d(data_2d):
     return np.concatenate((x, y, z)), t
 
 
-def plot_2d(data):
+def plot_2d(data,color):
     """ plots 2D data as scatterplot"""
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.scatter(data[0], data[1])
+    ax.scatter(data[0], data[1],c=color, cmap=plt.cm.Spectral)
 
 def plot_3d(data, color):
     """ 
@@ -114,3 +114,12 @@ def make_2d_holes(data, nb_holes=3, sigma=0.1, threshold=False):
     
     data = data[remove_mask]
     return data
+def get_differences(X_2d,trans):
+    dist_mat_true = euclidean_distances(np.squeeze(X_2d).T,np.squeeze(X_2d).T)
+    scaled_dist_mat_true=(dist_mat_true -np.min(dist_mat_true ))/(np.max(dist_mat_true )-np.min(dist_mat_true ))
+    differences=np.zeros(len(trans))
+    for i in range(len(trans)): 
+        dist_mat_trans = euclidean_distances(trans[i],trans[i])
+        scaled_dist_mat_trans=(dist_mat_trans -np.min(dist_mat_trans ))/(np.max(dist_mat_trans )-np.min(dist_mat_trans ))
+        differences[i]=np.linalg.norm(scaled_dist_mat_true-scaled_dist_mat_trans)
+    return differences

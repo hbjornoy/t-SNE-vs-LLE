@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 Axes3D
 from ipywidgets import *
 import pickle
-def plot_inter(color,var,Z,i,variable,transformation):
+def plot_inter(color,var,Z,i,variable,transformation,error=None,times=None,difference=None,error_type=None):
     """
     color: the colors of Z
     var: a list of the variable that is changing
@@ -28,13 +28,17 @@ def plot_inter(color,var,Z,i,variable,transformation):
     ax = fig.add_subplot(111)
     ax.set_title(transformation)
     ax.scatter(Z[i][:, 0], Z[i][:, 1], c=color, cmap=plt.cm.Spectral)
+    if error is not None:
+        plot_error_dist_and_time(var, error,times,difference,variable,error_type=error_type, i=i)
     plt.show()
 
-def plot_error_and_time(var, error,times,variable='variable', filename=False, error_type=False):
-    fig = plt.figure(figsize=(11,5))
-    ax = fig.add_subplot(121)
+def plot_error_dist_and_time(var, error,times,difference,variable='variable', filename=False, error_type=False, i=False):
+    fig = plt.figure(figsize=(20,5))
+    ax = fig.add_subplot(131)
     ax.plot(var,error,'go--')
-    if (variable=="Threshold" or variable=='reg'):
+    if i: 
+        ax.axvline(x=var[i],  color='r', linestyle='--')
+    if (variable=="threshold" or variable=='reg'):
         plt.xscale('log')
     #ax.set_title("t-SNE, KL divergence")
     if error_type:
@@ -42,14 +46,24 @@ def plot_error_and_time(var, error,times,variable='variable', filename=False, er
     else:
         ax.set_ylabel('Error')
     ax.set_xlabel('%s' %variable)
-    ax = fig.add_subplot(122)
+    ax = fig.add_subplot(132)
     ax.plot(var,times,'go--')
-    if (variable=="Threshold" or variable=='reg'):
+    if i: 
+        ax.axvline(x=var[i],  color='r', linestyle='--')
+    if (variable=="threshold" or variable=='reg'):
         plt.xscale('log')
     ax.set_ylabel('Time')
     ax.set_xlabel('%s' %variable)
+    ax = fig.add_subplot(133)
+    ax.plot(var,difference,'go--')
+    if i: 
+        ax.axvline(x=var[i],  color='r', linestyle='--')
+    if (variable=="threshold" or variable=='reg'):
+        plt.xscale('log')
+    ax.set_ylabel('Difference in 2d distance')
+    ax.set_xlabel('%s' %variable)
     #ax.set_title("t-SNE, Computational time")
-    
+    plt.show()
     if filename: 
         plt.savefig(filename)
 def plot_and_save_tsne(perplexity, filename, Z=pickle.load(open("p_Z_tsne.pkl", "rb")), per=pickle.load(open("per.pkl", "rb")), color=pickle.load(open("color.pkl", "rb"))):
