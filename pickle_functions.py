@@ -18,7 +18,7 @@ def get_swiss_roll(method,folder, create=False, n=1000, noise=0.01):
         X=pickle.load(open(folder+"/X_"+method+".pkl", "rb"))
         X_2d=pickle.load(open(folder+"/X_2d_"+method+".pkl", "rb"))
     return color,X,X_2d
-def perpexity(folder,per=np.arange(2,150,2), create=False): 
+def perplexity(folder,per=np.arange(2,150,2), create=False): 
     if create: 
         p_Z=[]
         p_times=np.zeros(len(per))
