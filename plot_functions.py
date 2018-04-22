@@ -66,7 +66,7 @@ def plot_error_dist_and_time(var, error,times,difference,variable='variable', fi
     plt.show()
     if filename: 
         plt.savefig(filename)
-def plot_and_save_tsne(perplexity, filename, Z=pickle.load(open("Pickles/p_Z_tsne.pkl", "rb")), per=pickle.load(open("Pickles/per.pkl", "rb")), color=pickle.load(open("Pickles/color.pkl", "rb"))):
+def plot_and_save_tsne(perplexity, filename, Z, per, color):
     if np.argwhere(per==perplexity).flatten(): 
         i=np.argwhere(per==perplexity).flatten()[0]
         fig = plt.figure()
