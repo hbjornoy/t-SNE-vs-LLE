@@ -20,6 +20,7 @@ def get_swiss_roll(method,folder,modification='', create=False, n=1000, noise=0.
         X=pickle.load(open(folder+"/X_"+name+".pkl", "rb"))
         X_2d=pickle.load(open(folder+"/X_2d_"+name+".pkl", "rb"))
     return color,X,X_2d
+
 def perplexity(folder,modification='',per=np.arange(2,150,2), create=False): 
     if create: 
         p_Z=[]
