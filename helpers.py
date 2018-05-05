@@ -9,8 +9,8 @@ from sklearn.utils import check_array, check_random_state
 # This import is needed to modify the way figure behaves
 from mpl_toolkits.mplot3d import Axes3D
 Axes3D
-
-def make_swissroll(n=1000, noise=1.0, nb_holes=0, sigma=0.4, threshold=False, random_state=None):
+np.random.seed(123)
+def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, random_state=123):
     """
     Make a swissroll data 
     
