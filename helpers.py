@@ -14,7 +14,10 @@ import plot_functions as PL
 from mpl_toolkits.mplot3d import Axes3D
 Axes3D
 
-def make_swissroll(n=1000, noise=0, nb_holes=0, sigma=0.4, threshold=False, random_state=None):
+np.random.seed(123)
+
+
+def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, random_state=123):
     """
     Make a swissroll data 
     
@@ -50,11 +53,13 @@ def make_swissroll(n=1000, noise=0, nb_holes=0, sigma=0.4, threshold=False, rand
     t = np.squeeze(t)
     return X, t, data_2d
 
+
 def make_2d_data(n, generator):
     """ generate a 2d uniformly sampled dataset"""
     t = 1.5 * np.pi * (1 + 2 * generator.rand(1, n))
     y = 4.5 * np.pi * (1 + 2 * generator.rand(1, n))
     return np.array([t, y])
+
 
 def transform_to_3d(data_2d):
     """ transform 2D data to 3D with a swiss roll transformation """
@@ -70,6 +75,7 @@ def plot_2d(data,color):
     ax = fig.add_subplot(111)
     ax.scatter(data[0], data[1],c=color, cmap=plt.cm.Spectral)
 
+
 def plot_3d(data, color):
     """ 
     plots 3D data as scatterplot where you can choose interactive plot or not
@@ -80,6 +86,7 @@ def plot_3d(data, color):
     ax.scatter(data[:,0], data[:,1], data[:,2], c=color, cmap=plt.cm.Spectral)
     plt.show()
     
+
 def keep_points(distance, sigma, threshold=False):
     """ Returns False if point is to be removed, True otherwise
     distance: a vector of distances to a given point. 
@@ -93,6 +100,7 @@ def keep_points(distance, sigma, threshold=False):
         return np.random.binomial(1,probability_of_rejecting)==0
     else: 
         return probability_of_rejecting < threshold
+    
     
 def make_2d_holes(data, nb_holes=3, sigma=0.1, threshold=False):
     """
