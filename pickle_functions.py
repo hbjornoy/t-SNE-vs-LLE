@@ -31,7 +31,8 @@ def get_swiss_roll(method,folder,modification='', create=False, n=1000, noise=0.
     return color,X,X_2d
 
 
-def get_augmented_swissroll(create=False,noise=False,holes=False,n=1000):
+def get_augmented_swissroll(create=False,noise=False,holes=False,datapoints=False,n=1000):
+
     folder='Data'
     if noise: 
         noises=[0.05,0.1,0.5,1,2]
@@ -42,6 +43,10 @@ def get_augmented_swissroll(create=False,noise=False,holes=False,n=1000):
         name='holes'
         holes=[[1,2],[1,5],[2,2],[2,5],[3,2],[3,5]]
         N=len(holes)
+    elif datapoints: 
+        name='datapoints'
+        datapoint=[100,500,1000,5000,10000]
+        N=len(datapoint)
     if create: 
         colors=[]
         Xs=[]
@@ -51,8 +56,10 @@ def get_augmented_swissroll(create=False,noise=False,holes=False,n=1000):
             if noise: 
                 X, color, X_2d=X, color, X_2d=HL.make_swissroll(n=n, noise=noises[i], random_state=123)
             elif holes: 
-                X, color, X_2d=X, color, X_2d=HL.make_swissroll(n=1000, noise=0.1, nb_holes=holes[i][0], sigma=holes[i][1],
+                X, color, X_2d=X, color, X_2d=HL.make_swissroll(n=n, noise=0.1, nb_holes=holes[i][0], sigma=holes[i][1],
                                                             threshold=0.5, random_state=123)
+            elif datapoints: 
+                X, color, X_2d=X, color, X_2d=HL.make_swissroll(n=datapoint[i],random_state=123)
             colors.append(color)
             Xs.append(X)
             X_2ds.append(X_2d)
@@ -67,8 +74,10 @@ def get_augmented_swissroll(create=False,noise=False,holes=False,n=1000):
         X_2ds=pickle.load(open(folder+"/X_2ds_"+name+".pkl", "rb"))
     if noise: 
         return Xs, colors, X_2ds,noises
-    else: 
+    elif holes: 
         return Xs, colors, X_2ds,holes
+    elif datapoints: 
+        return Xs, colors, X_2ds,datapoint
 
     
 def perplexity(folder=None,modification='',per=np.arange(2,150,2), create=False, pkl=True, X=None, X_2d_tsne=None): 

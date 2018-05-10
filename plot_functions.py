@@ -55,6 +55,8 @@ def plot_inter_grid(colors,var1,var2, Z,j, i,data_augmentation,variable,transfor
     str_holes=['1: 1 hole, size 2', '2: 1 hole, size 5','3: 2 holes, size 2', '4: 2 holes, size 5','5: 3 holes, size 2', '6: 3 holes, size 5'] 
     if data_augmentation=='noise':
         print('The noise is ', var1[j])
+    elif data_augmentation=='datapoints':
+        print('The number of datapoints is ', var1[j])
     elif data_augmentation=='holes':
         #print('The type of hole(s) is', var1[j])
         print(str_holes[j])
@@ -82,6 +84,7 @@ def plot_inter_grid(colors,var1,var2, Z,j, i,data_augmentation,variable,transfor
 def plot_error_dist_and_time(var, error,times,difference,variable='variable', filename=False, error_type=False, i=False):
     fig = plt.figure(figsize=(20,5))
     ax = fig.add_subplot(131)
+    print('this is var',var, 'this is error', error)
     ax.plot(var,error,'go--')
     ax.axvline(x=var[i],  color='r', linestyle='--')
     if (variable=="threshold" or variable=='reg'):
@@ -93,6 +96,7 @@ def plot_error_dist_and_time(var, error,times,difference,variable='variable', fi
         ax.set_ylabel('Error')
     ax.set_xlabel('%s' %variable)
     ax = fig.add_subplot(132)
+    print('this is var',var, 'this is times', times)
     ax.plot(var,times,'go--')
     ax.axvline(x=var[i],  color='r', linestyle='--')
     if (variable=="threshold" or variable=='reg'):
