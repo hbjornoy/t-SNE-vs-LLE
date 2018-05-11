@@ -222,4 +222,4 @@ def plot_digits_samples(inputs, row_dim, col_dim):
     plt.title("Samples from MNIST, handwritten digits")
     plt.savefig("mnist_examples_of_data.pdf")
     plt.show()
->>>>>>> 5c946b3afd66c6ac6006779f6da286cbc6071c73
+
