@@ -200,3 +200,26 @@ def plot_augmented_swissrolls(Xs, colors, var, variable_name):
         else: 
             ax.set_title(variable_name+': %1.2f' %var[i])
     plt.show()
+
+    
+def plot_digits_samples(inputs, row_dim, col_dim):
+    
+    # calculate pixelwidth
+    pixel_width = int(np.sqrt(inputs.shape[1]))
+    image = np.zeros(((pixel_width+2)*row_dim, (pixel_width+2)*col_dim))
+    
+    # map the inputs "unstructured" data to the two-dimensional picture
+    for i in range(row_dim):
+        x = (pixel_width+2)*i + 1
+
+        for j in range (col_dim):
+            y = (pixel_width+2)*j + 1
+            image[x:x+pixel_width, y:y+pixel_width] = inputs[i*col_dim + j].reshape((pixel_width,pixel_width))
+
+    plt.imshow(image, cmap=plt.cm.binary)
+    plt.xticks([])
+    plt.yticks([])
+    plt.title("Samples from MNIST, handwritten digits")
+    plt.savefig("mnist_examples_of_data.pdf")
+    plt.show()
+>>>>>>> 5c946b3afd66c6ac6006779f6da286cbc6071c73

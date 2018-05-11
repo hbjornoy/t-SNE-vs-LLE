@@ -4,8 +4,11 @@ import matplotlib.pyplot as plt
 import sklearn
 from sklearn.metrics.pairwise import euclidean_distances
 from scipy.stats import norm
-from sklearn.utils import check_array, check_random_state
+
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.utils import check_array, check_random_state, shuffle
+from sklearn import datasets 
+
 
 import plot_functions as PL
 
@@ -15,6 +18,17 @@ from mpl_toolkits.mplot3d import Axes3D
 Axes3D
 
 np.random.seed(123)
+
+def import_mnist():
+    #import data
+    digits = datasets.fetch_mldata('MNIST original', data_home="mnist")
+
+    # shuffle data
+    inputs, targets = shuffle(digits.data, digits.target, random_state=123)
+    print("inputs shape: ", inputs.shape)
+    print("targets shape: ", targets.shape)
+    
+    return inputs, targets
 
 
 def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, random_state=123,distribution='uniform'):
