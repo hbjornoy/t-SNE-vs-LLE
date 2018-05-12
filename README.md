@@ -46,3 +46,4 @@ to do:
 - skrive konkulusjon
 - skrive readme
 - Lese igjennom rapport sammen 
+- prøve å få figurer til å stå best mulig
