@@ -2,39 +2,39 @@
 Comparison of the Stochastic Neighbor Embedding(SNE) and the t-distributed SNE algorithms
 
 liste over bibiloteker vi bruker: 
-numpy
-sklearn
-seaborn
-ipywidgets
-pickle
-matplotlib
-time 
-from mpl_toolkits.mplot3d import Axes3D
+- numpy
+- sklearn
+- seaborn
+- ipywidgets
+- pickle
+- matplotlib
+- time 
+- from mpl_toolkits.mplot3d import Axes3D
 
 Vi skal levere inn: 
 
 Jupyter notebooks: 
 
-Section III B-1
-Section III B-2
-Section C
-Section D
-Section E
-Section F
+- Section III B-1
+- Section III B-2
+- Section C
+- Section D
+- Section E
+- Section F
 
 python files: 
 
-plot_functions.py
-helpers.py
-pickle_functions.py
-plot_mnist.py
+- plot_functions.py
+- helpers.py
+- pickle_functions.py
+- plot_mnist.py
 
 mapper: 
-SectionB
-SectionC_grid
-SectionD_grid
-SectionE_grid
-SectionF_grid
+- SectionB
+- SectionC_grid
+- SectionD_grid
+- SectionE_grid
+- SectionF_grid
 
 
 to do: 
