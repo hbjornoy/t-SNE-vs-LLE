@@ -4,8 +4,11 @@ import matplotlib.pyplot as plt
 import sklearn
 from sklearn.metrics.pairwise import euclidean_distances
 from scipy.stats import norm
+
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils import check_array, check_random_state, shuffle
 from sklearn import datasets 
+
 
 import plot_functions as PL
 
@@ -28,7 +31,7 @@ def import_mnist():
     return inputs, targets
 
 
-def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, random_state=123):
+def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, random_state=123,distribution='uniform'):
     """
     Make a swissroll data 
     
@@ -48,12 +51,14 @@ def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, ra
     t : color of the different points
     """
     generator = check_random_state(random_state)
-    data_2d = make_2d_data(n, generator)
+    data_2d = make_2d_data(n, generator, distribution=distribution)
+    
+    #data_2d = scale_2d_data(data_2d)
     
     # add potential holes in data
     if nb_holes > 0:
         data_2d = make_2d_holes(np.squeeze(data_2d.T), nb_holes=nb_holes, sigma=sigma,threshold=threshold).T
-
+        
     X, t = transform_to_3d(data_2d)
     
     # add potiential noise to data
@@ -64,11 +69,41 @@ def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, ra
     t = np.squeeze(t)
     return X, t, data_2d
 
+def scale_2d_data(data_2d):
+    scaler = MinMaxScaler(feature_range=(4,14), copy=False)
+    data_2d = scaler.fit_transform(data_2d)
+    return data_2d
+    
 
-def make_2d_data(n, generator):
+def make_2d_data(n, generator, distribution):
     """ generate a 2d uniformly sampled dataset"""
-    t = 1.5 * np.pi * (1 + 2 * generator.rand(1, n))
-    y = 4.5 * np.pi * (1 + 2 * generator.rand(1, n))
+    if distribution=='uniform': 
+        vector1=generator.rand(1, n)
+        vector2=generator.rand(1, n)
+        
+    elif distribution=='normal':
+        scaler =MinMaxScaler(feature_range=(0,1))
+        vector1=generator.normal(0.5,scale=0.30,size=n)
+        vector2=generator.normal(0.5,scale=0.30,size=n)
+
+    elif distribution=='beta': 
+        scaler =MinMaxScaler(feature_range=(0,1))
+        vector1=generator.beta(0.5,0.2,size=n)
+        vector2=generator.beta(0.5,0.2,size=n)
+       
+    elif distribution=='mixed_normal': 
+        scaler =MinMaxScaler(feature_range=(0,1))
+        a=generator.normal(0.25,0.125,size=int(n/2))
+        b=generator.normal(0.75,0.125,size=int(n/2))
+        vector1=np.vstack([a, b]).flatten().reshape(1,n)
+        vector2=generator.rand(1, n)
+       
+    if distribution is not 'uniform': 
+        vector1=scaler.fit_transform(vector1.reshape(n,1)).flatten()
+        vector2=scaler.fit_transform(vector2.reshape(n,1)).flatten()
+    
+    t = 1.5 * np.pi * (1 + 2 * vector1.reshape(1,n))
+    y = 4.5 * np.pi * (1 + 2 * vector2.reshape(1,n))
     return np.array([t, y])
 
 

@@ -31,7 +31,7 @@ def get_swiss_roll(method,folder,modification='', create=False, n=1000, noise=0.
     return color,X,X_2d
 
 
-def get_augmented_swissroll(create=False,noise=False,holes=False,datapoints=False,n=1000):
+def get_augmented_swissroll(create=False,noise=False,holes=False,datapoints=False,density=False,n=1000):
 
     folder='Data'
     if noise: 
@@ -47,6 +47,11 @@ def get_augmented_swissroll(create=False,noise=False,holes=False,datapoints=Fals
         name='datapoints'
         datapoint=[100,500,1000,5000,10000]
         N=len(datapoint)
+    elif density: 
+        name='density'
+        distributions=['uniform','normal','mixed_normal','beta']
+        N=len(distributions)
+        
     if create: 
         colors=[]
         Xs=[]
@@ -60,10 +65,12 @@ def get_augmented_swissroll(create=False,noise=False,holes=False,datapoints=Fals
                                                             threshold=0.5, random_state=123)
             elif datapoints: 
                 X, color, X_2d=X, color, X_2d=HL.make_swissroll(n=datapoint[i],random_state=123)
+            elif density: 
+                X, color, X_2d=X, color, X_2d=HL.make_swissroll(n=n,random_state=123, distribution=distributions[i])
+             
             colors.append(color)
             Xs.append(X)
             X_2ds.append(X_2d)
-        
         pickle.dump( Xs, open(folder+"/Xs_"+name+".pkl", "wb")) 
         pickle.dump( colors, open(folder+"/colors_"+name+".pkl", "wb")) 
         pickle.dump( X_2ds, open(folder+"/X_2ds_"+name+".pkl", "wb")) 
@@ -78,6 +85,8 @@ def get_augmented_swissroll(create=False,noise=False,holes=False,datapoints=Fals
         return Xs, colors, X_2ds,holes
     elif datapoints: 
         return Xs, colors, X_2ds,datapoint
+    elif density: 
+        return Xs, colors, X_2ds,distributions
 
     
 def perplexity(folder=None,modification='',per=np.arange(2,150,2), create=False, pkl=True, X=None, X_2d_tsne=None): 
@@ -363,11 +372,13 @@ def lle_different_data(var,folder, modification,N=None, Xs=None, X_2ds=None, cre
         difference=np.zeros([N,len(param)])
         for i in range(len(Xs)): 
             if var=='r':
-                Y,variable, time,reconstruction_error,differences=n_reg(create=True, X=Xs[i],reg=param,
-                                                                       pkl=False, X_2d_lle=X_2ds[i])
+                Y,variable, time,reconstruction_error,differences=n_reg(create=True,
+                                                                        X=Xs[i], reg=param,
+                                                                        pkl=False,X_2d_lle=X_2ds[i])
             elif var=='n':
-                 Y,variable, time,reconstruction_error,differences=n_neighbors(create=True, X=Xs[i],n_neighbors=param,
-                                                                       pkl=False, X_2d_lle=X_2ds[i])
+                 Y,variable, time,reconstruction_error,differences=n_neighbors(create=True, X=Xs[i],
+                                                                               n_neighbors=param,pkl=False,
+                                                                               X_2d_lle=X_2ds[i])
             Ys.append(Y)
             times[i,:]=time
             reconstruction_errors[i,:]=reconstruction_error
@@ -421,7 +432,6 @@ def t_sne_different_data(var,folder, modification,N=None, Xs=None, X_2ds=None, c
             times[i,:]=time
             kl_divergences[i,:]=kl_divergence
             difference[i,:]=differences
-            print('first for loop is done')
         
         pickle.dump(Zs, open(folder+"/"+var+"_Z_"+modification+".pkl", "wb")) 
         pickle.dump(times, open(folder+"/"+var+"_times_"+modification+".pkl","wb"))
