@@ -131,7 +131,7 @@ def plot_and_save_tsne(perplexity, filename, Z, per, color):
         print('Transformation is not made for this perplexity, availiable perplexities are:', per)
 
 
-def plot_embedding(X_orig, X_trans, y, title=None):
+def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, images=False, im_thres=3e-3):
     """
     Plots the manifold embedding with the some of the original images across the data.
     Strongly inspired and based on sklearn docs examples:
@@ -143,22 +143,25 @@ def plot_embedding(X_orig, X_trans, y, title=None):
     # License: BSD 3 clause (C) INRIA 2011
     """
     x_min, x_max = np.min(X_trans, 0), np.max(X_trans, 0)
-    X_trans = (X_trans - x_min) / (x_max - x_min)
+    # multiplied scalar to the range to get the point away from the plot range
+    X_trans = ((X_trans - x_min) / ((x_max - x_min)*1.1))+0.05
+    
+    if fig is None:
+        fig = plt.figure(figsize=(10,10))
 
-    plt.figure(figsize=(10, 10))
-    ax = plt.subplot(111)
+    ax = fig.add_subplot(subplot_pos)
     for i in range(X_trans.shape[0]):
         plt.text(X_trans[i, 0], X_trans[i, 1], str(int(y[i])),
                  color=plt.cm.Set1(y[i] / 10.),
                  fontdict={'weight': 'bold', 'size': 9})
     
     # the pictures are too big
-    if hasattr(offsetbox, 'AnnotationBbox'):
+    if images:
         # only print thumbnails with matplotlib > 1.0
         shown_images = np.array([[1, 1]])  # just something big
         for i in range(X_trans.shape[0]):
             dist = np.sum((X_trans[i] - shown_images) ** 2, 1)
-            if np.min(dist) < 3e-3:
+            if np.min(dist) < im_thres:
                 # don't show points that are too close
                 continue
             shown_images = np.r_[shown_images, [X_trans[i]]]
@@ -171,9 +174,10 @@ def plot_embedding(X_orig, X_trans, y, title=None):
     plt.xticks([]), plt.yticks([])
     if title is not None:
         plt.title(title)
+    return ax
         
 
-     
+
 def plot_augmented_swissrolls(Xs, colors, var, variable_name):
     fig = plt.figure(figsize=(15,10))
     

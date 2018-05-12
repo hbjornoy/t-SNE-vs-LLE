@@ -289,7 +289,6 @@ def kmeans_clustering_accuracy(inputs, targets, algorithm, grid_width=4, nb_samp
     if not create:
         # load pickle
         d = pickle.load(open(folder+"/"+algorithm+"_grid-"+str(grid_width)+"_samples-"+str(nb_samples)+"_"+name+".pkl", "rb"))
-        
         # plot heatmap of accuracy with regard to different hyperparameters
         PL.plot_heatmap(d['acc_list'], d['algorithm'], d['param1_space'], d['param2_space'])
         # return data from pickled data
@@ -320,7 +319,7 @@ def kmeans_clustering_accuracy(inputs, targets, algorithm, grid_width=4, nb_samp
                                                        method='standard', random_state=random_state)
             elif algorithm=="tsne":
                 mani = manifold.TSNE(n_components=2, perplexity = param1, min_grad_norm=param2, 
-                                     n_iter=1000, metric='euclidean', init='pca', verbose=0, random_state=random_state)
+                                     n_iter=1000, metric='euclidean', init='random', verbose=0, random_state=random_state)
                 
             X = mani.fit_transform(inputs[0:nb_samples])
                 
