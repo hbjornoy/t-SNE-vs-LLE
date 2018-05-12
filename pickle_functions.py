@@ -14,20 +14,16 @@ import plot_functions as PL
 np.random.seed(123)
 
 
-def get_swiss_roll(method,folder,modification='', create=False, n=1000, noise=0.01):
-    if not (method=='tsne' or method=='lle' or method==''):
-        print('Not valid method')
-    name=method+modification
-   
+def get_swiss_roll(folder,modification='', create=False, n=1000, noise=0.01):
     if create: 
         X, color, X_2d=HL.make_swissroll(n=n, noise=noise)
-        pickle.dump( X, open(folder+"/X_"+name+".pkl", "wb")) 
-        pickle.dump( color, open(folder+"/color_"+name+".pkl", "wb")) 
-        pickle.dump( X_2d, open(folder+"/X_2d_"+name+".pkl", "wb")) 
+        pickle.dump( X, open(folder+"/X"+modification+".pkl", "wb")) 
+        pickle.dump( color, open(folder+"/color"+modification+".pkl", "wb")) 
+        pickle.dump( X_2d, open(folder+"/X_2d"+modification+".pkl", "wb")) 
     else: 
-        color=pickle.load(open(folder+"/color_"+name+".pkl", "rb"))
-        X=pickle.load(open(folder+"/X_"+name+".pkl", "rb"))
-        X_2d=pickle.load(open(folder+"/X_2d_"+name+".pkl", "rb"))
+        color=pickle.load(open(folder+"/color"+modification+".pkl", "rb"))
+        X=pickle.load(open(folder+"/X"+modification+".pkl", "rb"))
+        X_2d=pickle.load(open(folder+"/X_2d"+modification+".pkl", "rb"))
     return color,X,X_2d
 
 
@@ -94,8 +90,8 @@ def perplexity(folder=None,modification='',per=np.arange(2,150,2), create=False,
         p_Z=[]
         p_times=np.zeros(len(per))
         p_kl_divergence=np.zeros(len(per))
-        if X==None: 
-            X=pickle.load(open(folder+"/X_tsne"+modification+".pkl", "rb"))
+        if X is None: 
+            X=pickle.load(open(folder+"/X"+modification+".pkl", "rb"))
         for i, p in enumerate(per):
             tsne=t_sne(perplexity=p, random_state=123)
             start_time=time.time()
@@ -112,8 +108,8 @@ def perplexity(folder=None,modification='',per=np.arange(2,150,2), create=False,
         per=pickle.load(open(folder+"/per"+modification+".pkl", "rb"))
         p_times=pickle.load(open(folder+"/p_times"+modification+".pkl", "rb"))
         p_kl_divergence=pickle.load(open(folder+"/p_kl_divergence"+modification+".pkl", "rb"))
-    if X_2d_tsne==None:
-        X_2d_tsne=pickle.load(open(folder+"/X_2d_tsne"+modification+".pkl", "rb"))
+    if X_2d_tsne is None:
+        X_2d_tsne=pickle.load(open(folder+"/X_2d"+modification+".pkl", "rb"))
     p_differences=HL.get_differences(X_2d_tsne,p_Z)
     return p_Z,per,p_times,p_kl_divergence,p_differences
 
@@ -123,7 +119,7 @@ def early_exxaggeration(folder,modification='',create=False,early_exaggeration=n
         e_Z=[]
         e_times=np.zeros(len(early_exaggeration))
         e_kl_divergence=np.zeros(len(early_exaggeration))
-        X=pickle.load(open(folder+"/X_tsne"+modification+".pkl", "rb"))
+        X=pickle.load(open(folder+"/X"+modification+".pkl", "rb"))
         for i, e in enumerate(early_exaggeration):
             tsne=t_sne(early_exaggeration=e,random_state=123)
             start_time=time.time()
@@ -139,7 +135,7 @@ def early_exxaggeration(folder,modification='',create=False,early_exaggeration=n
         early_exaggeration=pickle.load(open(folder+"/early_exaggeration"+modification+".pkl", "rb"))
         e_times=pickle.load(open(folder+"/e_times"+modification+".pkl", "rb"))
         e_kl_divergence=pickle.load(open(folder+"/e_kl_divergence"+modification+".pkl", "rb"))
-    X_2d_tsne=pickle.load(open(folder+"/X_2d_tsne"+modification+".pkl", "rb"))
+    X_2d_tsne=pickle.load(open(folder+"/X_2d"+modification+".pkl", "rb"))
     e_differences=HL.get_differences(X_2d_tsne,e_Z)
     return e_Z,early_exaggeration,e_times,e_kl_divergence,e_differences
 
@@ -149,7 +145,7 @@ def learning_rates(folder,modification='', create=False, learning_rates=np.arang
         l_Z=[]
         l_times=np.zeros(len(learning_rates))
         l_kl_divergence=np.zeros(len(learning_rates))
-        X=pickle.load(open(folder+"/X_tsne"+modification+".pkl", "rb"))
+        X=pickle.load(open(folder+"/X"+modification+".pkl", "rb"))
         for i, l in enumerate(learning_rates):
             tsne=t_sne(learning_rate=l,random_state=123)
             start_time=time.time()
@@ -165,7 +161,7 @@ def learning_rates(folder,modification='', create=False, learning_rates=np.arang
         learning_rates=pickle.load(open(folder+"/learning_rates"+modification+".pkl", "rb"))
         l_times=pickle.load(open(folder+"/l_times"+modification+".pkl", "rb"))
         l_kl_divergence=pickle.load(open(folder+"/l_kl_divergence"+modification+".pkl", "rb"))
-    X_2d_tsne=pickle.load(open(folder+"/X_2d_tsne"+modification+".pkl", "rb"))
+    X_2d_tsne=pickle.load(open(folder+"/X_2d"+modification+".pkl", "rb"))
     l_differences=HL.get_differences(X_2d_tsne,l_Z)
     return l_Z,learning_rates,l_times,l_kl_divergence,l_differences
 
@@ -175,7 +171,7 @@ def threshold(folder, modification='',create=False,threshold=np.logspace(-14,-1,
         t_Z=[]
         t_times=np.zeros(len(threshold))
         t_kl_divergence=np.zeros(len(threshold))
-        X=pickle.load(open(folder+"/X_tsne"+modification+".pkl", "rb"))
+        X=pickle.load(open(folder+"/X"+modification+".pkl", "rb"))
         for i, t in enumerate(threshold):
             tsne=t_sne(min_grad_norm=t, random_state=123)
             start_time=time.time()
@@ -191,7 +187,7 @@ def threshold(folder, modification='',create=False,threshold=np.logspace(-14,-1,
         threshold=pickle.load(open(folder+"/threshold"+modification+".pkl", "rb"))
         t_times=pickle.load(open(folder+"/t_times"+modification+".pkl", "rb"))
         t_kl_divergence=pickle.load(open(folder+"/t_kl_divergence"+modification+".pkl", "rb"))
-    X_2d_tsne=pickle.load(open(folder+"/X_2d_tsne"+modification+".pkl", "rb"))
+    X_2d_tsne=pickle.load(open(folder+"/X_2d"+modification+".pkl", "rb"))
     t_differences=HL.get_differences(X_2d_tsne,t_Z)
     return t_Z,threshold,t_times,t_kl_divergence,t_differences
 
@@ -199,8 +195,8 @@ def threshold(folder, modification='',create=False,threshold=np.logspace(-14,-1,
 def n_neighbors(folder=None, modification='',create=False,n_neighbors=np.arange(3,60,1), X=None, pkl=True, X_2d_lle=None):  
     if create: 
         n_components=2
-        if X==None:
-            X=pickle.load(open(folder+"/X_lle"+modification+".pkl", "rb"))
+        if X is None:
+            X=pickle.load(open(folder+"/X"+modification+".pkl", "rb"))
         n_Y=[]
         n_times=np.zeros(len(n_neighbors))
         n_reconstruction_error=np.zeros(len(n_neighbors))
@@ -221,16 +217,16 @@ def n_neighbors(folder=None, modification='',create=False,n_neighbors=np.arange(
         n_neighbors=pickle.load(open(folder+"/n_neighbors"+modification+".pkl", "rb"))
         n_times=pickle.load(open(folder+"/n_times"+modification+".pkl", "rb"))
         n_reconstruction_error=pickle.load(open(folder+"/n_reconstruction_error"+modification+".pkl", "rb"))
-    if X_2d_lle==None:
-        X_2d_lle=pickle.load(open(folder+"/X_2d_lle"+modification+".pkl", "rb"))
+    if X_2d_lle is None:
+        X_2d_lle=pickle.load(open(folder+"/X_2d"+modification+".pkl", "rb"))
     n_differences=HL.get_differences(X_2d_lle,n_Y)
     return n_Y,n_neighbors, n_times,n_reconstruction_error,n_differences
 
 
 def n_reg(folder=None, modification='',create=False,reg=np.logspace(-14,10,50), X=None, pkl=True, X_2d_lle=None): 
     if create:
-        if X== None:
-            X=pickle.load(open(folder+"/X_lle"+modification+".pkl", "rb"))
+        if X is None:
+            X=pickle.load(open(folder+"/X"+modification+".pkl", "rb"))
         n_components=2
         neighbors=12
         r_Y=[]
@@ -252,8 +248,8 @@ def n_reg(folder=None, modification='',create=False,reg=np.logspace(-14,10,50), 
         reg=pickle.load(open(folder+"/reg"+modification+".pkl", "rb"))
         r_times=pickle.load(open(folder+"/r_times"+modification+".pkl", "rb"))
         r_reconstruction_error=pickle.load(open(folder+"/r_reconstruction_error"+modification+".pkl", "rb"))
-    if X_2d_lle==None:
-        X_2d_lle=pickle.load(open(folder+"/X_2d_lle"+modification+".pkl", "rb"))
+    if X_2d_lle is None:
+        X_2d_lle=pickle.load(open(folder+"/X_2d"+modification+".pkl", "rb"))
     r_differences=HL.get_differences(X_2d_lle,r_Y)
     return r_Y,reg, r_times,r_reconstruction_error,r_differences
 

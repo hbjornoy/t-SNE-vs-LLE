@@ -5,11 +5,10 @@ Axes3D
 from ipywidgets import *
 import pickle
 from matplotlib import offsetbox
-import seaborn as sns
+
 
 np.random.seed(123)
-import matplotlib
-matplotlib.rcParams['figure.facecolor'] = 'w'
+
 
 def plot_inter(color,var,Z,i,variable,transformation,error=None,times=None,difference=None,error_type=None):
     """
@@ -174,20 +173,7 @@ def plot_embedding(X_orig, X_trans, y, title=None):
         plt.title(title)
         
 
-def plot_heatmap(acc_list, algorithm, param1_space, param2_space):
-    """plot heatmap of accuracy with regard to different hyperparameters"""
-    ax = sns.heatmap(acc_list, cmap="YlGnBu_r")
-    if algorithm == "lle":
-        ax.set_xlabel("regularization term (R)")
-        ax.set_ylabel("number of neighbors (K)")
-    elif algorithm == "tsne":
-        ax.set_xlabel("tolerance (tol)")
-        ax.set_ylabel("perplexity (Perp)")
-    ax.set_xticklabels(param2_space)
-    ax.set_yticklabels(param1_space)
-    plt.show()
-
-        
+     
 def plot_augmented_swissrolls(Xs, colors, var, variable_name):
     fig = plt.figure(figsize=(15,10))
     
