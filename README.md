@@ -39,8 +39,10 @@ mapper:
 
 to do: 
 - kommentere alle funsjoner
+      - Hedda har kommentert det meste hun har lagd
 - få ferdig del om MNIST
 - Få inn plott om MNIST
 - diskutere plott om MNIST
 - skrive konkulusjon
 - skrive readme
+- Lese igjennom rapport sammen 
