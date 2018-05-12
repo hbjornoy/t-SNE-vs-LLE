@@ -5,7 +5,14 @@ import seaborn as sns
 
 
 def plot_heatmap(acc_list, algorithm, param1_space, param2_space):
-    """plot heatmap of accuracy with regard to different hyperparameters"""
+    """plot heatmap of accuracy with regard to different hyperparameters
+  
+    Parameters
+    -------------
+    
+    Output
+    -------------
+    """
 
     ax = sns.heatmap(acc_list, cmap="YlGnBu_r")
     if algorithm == "lle":

@@ -15,6 +15,23 @@ np.random.seed(123)
 
 
 def get_swiss_roll(folder,modification='', create=False, n=1000, noise=0.01):
+    """
+    Function used to create and load the swiss roll used in section B
+    
+    Parameters
+    -------------
+    folder: the name of the folder the pickles are/should be saved in
+    modification: a string, if you want to modify the name of the pickles
+    create: True if you want to create datasets, false if you want to load pickels.
+    n: Default 1000
+    noise: Default 0.01
+    
+    Output
+    -------------
+    color: The corresponding colors
+    X: The 3d swiss roll
+    X_2d: The corresponding 2d data
+    """
     if create: 
         X, color, X_2d=HL.make_swissroll(n=n, noise=noise)
         pickle.dump( X, open(folder+"/X"+modification+".pkl", "wb")) 
@@ -28,6 +45,32 @@ def get_swiss_roll(folder,modification='', create=False, n=1000, noise=0.01):
 
 
 def get_augmented_swissroll(create=False,noise=False,holes=False,datapoints=False,density=False,n=1000):
+    """
+    Function used to creat and load the swiss rolls used in section C, D E and F. 
+    Parameters
+    -------------
+    create: True if you want to create the datasets, false if you want to load pickles. Default False
+    noise: True if you want datasets with different levels of noise. Defualt : False
+    holes: True if you want datasets with different holes.  Default :False
+    datapoints: True if you want datasets with different number of datapoints.  Default: False
+    density: True if you want datasets with different underlying densities.  Default False
+    n: Number of datapoints.  Default 1000.
+    
+    Output
+    -------------
+    
+    colors: A list of the corresponding colors
+    Xs: A list of the 3d swiss rolls
+    X_2ds: A list of the corresponding 2d datasets
+  
+    noises: a vector containing the different noise levels
+    or 
+    holes: a vector containing tuples (a,b) descibing the holes, where a is the number of holes and b is the size of the holes
+    or
+    datapoint:a vector containing the number of datapoints
+    or
+    distributions: a vector containing strigs that are the name of the underlying distributions. 
+    """
 
     folder='Data'
     if noise: 
@@ -86,6 +129,27 @@ def get_augmented_swissroll(create=False,noise=False,holes=False,datapoints=Fals
 
     
 def perplexity(folder=None,modification='',per=np.arange(2,150,2), create=False, pkl=True, X=None, X_2d_tsne=None): 
+    """
+    Function used to generate or load t-SNE transformations with a range of different perplexities. 
+    Parameters
+    -------------
+    folder: The name of the folder the pickles should be put in / are in
+    modification: the modification done to the dataset, a string used in the name of the corresponding pickles. 
+    per: the perplexities you want to create transformations of
+    create: true is you want to create the transformations, false if you want to load them
+    pkl: true if you want to make a pickle for every value of per, otherwise false
+    X: the data you want to transform
+    X_2d_tsne: the original 2D version of X
+    
+    Output
+    -------------
+    p_Z: A ilst of the t-SNE transformations
+    per: a vector with the corresponding values of perplexity
+    p_times: a vector with the corresponding values of computational time
+    p_kl_divergence: a vector with the corresponding values kl divergence
+    p_differences: a vector with the corresponding values of difference in 2d distance
+    
+    """
     if create: 
         p_Z=[]
         p_times=np.zeros(len(per))
@@ -114,7 +178,25 @@ def perplexity(folder=None,modification='',per=np.arange(2,150,2), create=False,
     return p_Z,per,p_times,p_kl_divergence,p_differences
 
 
-def early_exxaggeration(folder,modification='',create=False,early_exaggeration=np.arange(1,80,1)): 
+def early_exaggeration(folder,modification='',create=False,early_exaggeration=np.arange(1,80,1)): 
+    """
+    Function used to generate or load t-SNE transformations with a range of different early exaggeration rates. 
+    Parameters
+    -------------
+    folder: The name of the folder the pickles should be put in / are in
+    modification: the modification done to the dataset, a string used in the name of the corresponding pickles. 
+    early_exaggeration: the early exaggeration rates you want to create transformations of
+    create: true is you want to create the transformations, false if you want to load them
+    pkl true if you want to make a pickle for every value of early_exaggeration, otherwise false 
+    
+    Output
+    -------------
+    e_Z: A ilst of the t-SNE transformations
+    early_exaggeration: a vector with the corresponding values of early_exaggeration
+    e_times: a vector with the corresponding values of computational time
+    e_kl_divergence: a vector with the corresponding values kl divergence
+    e_differences: a vector with the corresponding values of difference in 2d distance
+    """
     if create: 
         e_Z=[]
         e_times=np.zeros(len(early_exaggeration))
@@ -141,6 +223,24 @@ def early_exxaggeration(folder,modification='',create=False,early_exaggeration=n
 
 
 def learning_rates(folder,modification='', create=False, learning_rates=np.arange(5,1000,5) ): 
+    """
+    Function used to generate or load t-SNE transformations with a range of different learning rates. 
+    Parameters
+    -------------
+    folder: The name of the folder the pickles should be put in / are in
+    modification: the modification done to the dataset, a string used in the name of the corresponding pickles. 
+    learning_rates: the learning rates rates you want to create transformations of
+    create: true is you want to create the transformations, false if you want to load them
+    pkl: true if you want to make a pickle for every value of learning_rate, otherwise false 
+    
+    Output
+    -------------
+    l_Z: A ilst of the t-SNE transformations
+    learning_rates: a vector with the corresponding values of learning rate
+    l_times: a vector with the corresponding values of computational time
+    l_kl_divergence: a vector with the corresponding values kl divergence
+    l_differences: a vector with the corresponding values of difference in 2d distance
+    """
     if create: 
         l_Z=[]
         l_times=np.zeros(len(learning_rates))
@@ -167,6 +267,24 @@ def learning_rates(folder,modification='', create=False, learning_rates=np.arang
 
 
 def threshold(folder, modification='',create=False,threshold=np.logspace(-14,-1,50) ): 
+    """
+    Function used to generate or load t-SNE transformations with a range of different thresholds (tol/min_grad_norm). 
+    Parameters
+    -------------
+    folder: The name of the folder the pickles should be put in / are in
+    modification: the modification done to the dataset, a string used in the name of the corresponding pickles. 
+    threshold: the thresholds you want to create transformations of
+    create: true is you want to create the transformations, false if you want to load them
+    pkl: true if you want to make a pickle for every value of threshold, otherwise false 
+    
+    Output
+    -------------
+    t_Z: A ilst of the t-SNE transformations
+    learning_rates: a vector with the corresponding values of learning rate
+    t_times: a vector with the corresponding values of computational time
+    t_kl_divergence: a vector with the corresponding values kl divergence
+    t_differences: a vector with the corresponding values of difference in 2d distance
+    """
     if create: 
         t_Z=[]
         t_times=np.zeros(len(threshold))
@@ -192,7 +310,28 @@ def threshold(folder, modification='',create=False,threshold=np.logspace(-14,-1,
     return t_Z,threshold,t_times,t_kl_divergence,t_differences
 
 
-def n_neighbors(folder=None, modification='',create=False,n_neighbors=np.arange(3,60,1), X=None, pkl=True, X_2d_lle=None):  
+def n_neighbors(folder=None, modification='',create=False,n_neighbors=np.arange(3,60,1), X=None, pkl=True, X_2d_lle=None): 
+    """
+    Function used to generate or load LLE transformations with a range of different number of neighbours. 
+    Parameters
+    -------------
+    folder: The name of the folder the pickles should be put in / are in
+    modification: the modification done to the dataset, a string used in the name of the corresponding pickles. 
+    n_neighbors: the number of neighbours you want to create transformations of
+    create: true is you want to create the transformations, false if you want to load them
+    pkl: true if you want to make a pickle for every value of early_exaggeration, otherwise false 
+    X: Dataset (3d swiss roll)
+    X_2d_lle: corresponding 2d data
+    
+    Output
+    -------------
+   
+    n_Y: A ilst of the LLE transformations
+    n_neighbors: a vector with the corresponding values of number of neighbours
+    n_times:a vector with the corresponding values of computational time
+    n_reconstruction_error: a vector with the corresponding values of reconstruction error
+    n_differences:a vector with the corresponding values of difference in 2d distance
+    """
     if create: 
         n_components=2
         if X is None:
@@ -224,6 +363,27 @@ def n_neighbors(folder=None, modification='',create=False,n_neighbors=np.arange(
 
 
 def n_reg(folder=None, modification='',create=False,reg=np.logspace(-14,10,50), X=None, pkl=True, X_2d_lle=None): 
+     """
+    Function used to generate or load LLE transformations with a range of different regularization term. 
+    Parameters
+    -------------
+    folder: The name of the folder the pickles should be put in / are in
+    modification: the modification done to the dataset, a string used in the name of the corresponding pickles. 
+    reg: the values of the regularizatin term you want to create transformations of
+    create: true is you want to create the transformations, false if you want to load them
+    pkl: true if you want to make a pickle for every value of early_exaggeration, otherwise false 
+    X: Dataset (3d swiss roll)
+    X_2d_lle: corresponding 2d data
+    
+    Output
+    -------------
+   
+    r_Y: A ilst of the LLE transformations
+    reg: a vector with the corresponding values of the regularisation term
+    r_times:a vector with the corresponding values of computational time
+    r_reconstruction_error: a vector with the corresponding values of reconstruction error
+    r_differences:a vector with the corresponding values of difference in 2d distance
+    """
     if create:
         if X is None:
             X=pickle.load(open(folder+"/X"+modification+".pkl", "rb"))
@@ -349,13 +509,24 @@ def kmeans_clustering_accuracy(inputs, targets, algorithm, grid_width=4, nb_samp
 
 def lle_different_data(var,folder, modification,N=None, Xs=None, X_2ds=None, create=False):
     """
+    Parameters
+    -------------
     var: 'r' or 'n' for regularization or number of neighbours
     folder: the folder the pickles should be in. 
-    modification: 'noise' or 'holes'
+    modification: 'noise', 'holes' etc
     N: number of datasets, (eg len(noises))
-    Xs: data
-    X_2ds
+    Xs: list of 3d swiss rolls
+    X_2ds: list of corresponding 2d data
     create: True if we want to create pickles
+    
+    Output
+    -------------
+    Ys: a list of the LLE transformations
+    variable: a vector containing the values of 'var' 
+    times: a vector with the corresponding values of computational time
+    reconstruction_errors:  a vector with the corresponding values of reconstruction error
+    difference:a vector with the corresponding values of difference in 2d distance
+
     """
     if var=='r':
         param=np.logspace(-14,10,50)
@@ -404,13 +575,23 @@ def lle_different_data(var,folder, modification,N=None, Xs=None, X_2ds=None, cre
 
 def t_sne_different_data(var,folder, modification,N=None, Xs=None, X_2ds=None, create=False):
     """
+    Parameters
+    -------------
     var: 'p' for perplexity
     folder: the folder the pickles should be in. 
-    modification: 'noise' or 'holes'
-    N: number of datasets, (eg len(perplexity))
-    Xs: data
-    X_2ds
+    modification: 'noise', 'holes' etc
+    N: number of datasets, (eg len(noises))
+    Xs: list of 3d swiss rolls
+    X_2ds: list of corresponding 2d data
     create: True if we want to create pickles
+    
+    Output
+    -------------
+    Zs: a list of the t-SNE transformations
+    param: a vector containing the values of 'var' 
+    times: a vector with the corresponding values of computational time
+    kl_divergence:  a vector with the corresponding values of kl divergence
+    difference:a vector with the corresponding values of difference in 2d distance
     """
     if var=='p':
         param=np.arange(2,150,2)

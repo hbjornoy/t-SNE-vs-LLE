@@ -20,6 +20,11 @@ Axes3D
 np.random.seed(123)
 
 def import_mnist():
+    """
+    
+     Output
+    -------------
+    """
     #import data
     digits = datasets.fetch_mldata('MNIST original', data_home="mnist")
 
@@ -69,36 +74,31 @@ def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, ra
     t = np.squeeze(t)
     return X, t, data_2d
 
-def scale_2d_data(data_2d):
-    scaler = MinMaxScaler(feature_range=(4,14), copy=False)
-    data_2d = scaler.fit_transform(data_2d)
-    return data_2d
-    
 
 def make_2d_data(n, generator, distribution):
-    """ generate a 2d uniformly sampled dataset"""
+    """ generate a 2d dataset, sampled according to 'distibution'"""
     if distribution=='uniform': 
         vector1=generator.rand(1, n)
         vector2=generator.rand(1, n)
         
     elif distribution=='normal':
-        scaler =MinMaxScaler(feature_range=(0,1))
         vector1=generator.normal(0.5,scale=0.30,size=n)
         vector2=generator.normal(0.5,scale=0.30,size=n)
 
     elif distribution=='beta': 
-        scaler =MinMaxScaler(feature_range=(0,1))
+       
         vector1=generator.beta(0.5,0.2,size=n)
         vector2=generator.beta(0.5,0.2,size=n)
        
     elif distribution=='mixed_normal': 
-        scaler =MinMaxScaler(feature_range=(0,1))
+        
         a=generator.normal(0.25,0.125,size=int(n/2))
         b=generator.normal(0.75,0.125,size=int(n/2))
         vector1=np.vstack([a, b]).flatten().reshape(1,n)
         vector2=generator.rand(1, n)
        
     if distribution is not 'uniform': 
+        scaler =MinMaxScaler(feature_range=(0,1))
         vector1=scaler.fit_transform(vector1.reshape(n,1)).flatten()
         vector2=scaler.fit_transform(vector2.reshape(n,1)).flatten()
     
@@ -182,6 +182,13 @@ def get_X_with_label(inputs, targets, label):
 
 
 def get_differences(X_2d,trans):
+    """
+    Parameters
+    -------------
+    
+    Output
+    -------------
+    """
     dist_mat_true = euclidean_distances(np.squeeze(X_2d).T,np.squeeze(X_2d).T)
     scaled_dist_mat_true=(dist_mat_true -np.min(dist_mat_true ))/(np.max(dist_mat_true )-np.min(dist_mat_true ))
     differences=np.zeros(len(trans))
