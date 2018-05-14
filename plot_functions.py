@@ -5,19 +5,25 @@ Axes3D
 from ipywidgets import *
 import pickle
 from matplotlib import offsetbox
-import seaborn as sns
+
 
 np.random.seed(123)
-import matplotlib
-matplotlib.rcParams['figure.facecolor'] = 'w'
+
 
 def plot_inter(color,var,Z,i,variable,transformation,error=None,times=None,difference=None,error_type=None):
     """
+  
+    Parameters
+    -------------
     color: the colors of Z
     var: a list of the variable that is changing
     Z: A list of t-SNE transformations, with different perplexities s.t. Z[i] has perplexity per[i]. 
     i: the index of the transformation we want to plot
     variable: 'per', 'threshold', 'learning_rate'
+
+    Output
+    -------------
+ 
     """
     if variable=='per':
         print('The perplexity is', var[i])
@@ -42,6 +48,10 @@ def plot_inter(color,var,Z,i,variable,transformation,error=None,times=None,diffe
 
 def plot_inter_grid(colors,var1,var2, Z,j, i,data_augmentation,variable,transformation,error=None,times=None,difference=None,error_type=None):
     """
+    Function 
+    Parameters
+    -------------
+
     colors: A list of the colors of each dataset 
     var1: a list of the first variable that is changing (eg noise, holes...))
     var2: a list of the second variable that is changing (eg reg, number of neighbours, perplexity)
@@ -51,9 +61,16 @@ def plot_inter_grid(colors,var1,var2, Z,j, i,data_augmentation,variable,transfor
     data_augmentation: Description of the difference in dataset, eg 'noise', 'holes'.. 
     variable: Name of the hyperparameter we are changing (var2),'per', 'threshold', 'learning_rate'
     transformation: 'lle' or 't-sne'
-    error: 
+    error: a matrix containing  kl-divergence or reconstuction error for each value of var1 and var2
+    times: a matrix containing  computational time for each value of var1 and var2
+    difference:a matrix containing  changes in 2d difference for each value of var1 and var2
+    error_type: 'kl divergence' or 'reconstruction error' 
+    
+    Output
+    -------------
+    A plot showing the transformation at index i, j and a plot of changes in error, time and changes in 2d difference.  
     """
-    str_holes=['1: 1 hole, size 2', '2: 1 hole, size 5','3: 2 holes, size 2', '4: 2 holes, size 5','5: 3 holes, size 2', '6: 3 holes, size 5'] 
+    
     if data_augmentation=='noise':
         print('The noise is ', var1[j])
     elif data_augmentation=='distribution':
@@ -62,7 +79,7 @@ def plot_inter_grid(colors,var1,var2, Z,j, i,data_augmentation,variable,transfor
     elif data_augmentation=='datapoints':
         print('The number of datapoints is ', var1[j])
     elif data_augmentation=='holes':
-        #print('The type of hole(s) is', var1[j])
+        str_holes=['1: 1 hole, size 2', '2: 1 hole, size 5','3: 2 holes, size 2', '4: 2 holes, size 5','5: 3 holes, size 2', '6: 3 holes, size 5'] 
         print(str_holes[j])
     if variable=='per':
         print('The perpelxity is', var2[i])
@@ -86,6 +103,22 @@ def plot_inter_grid(colors,var1,var2, Z,j, i,data_augmentation,variable,transfor
 
 
 def plot_error_dist_and_time(var, error,times,difference,variable='variable', filename=False, error_type=False, i=False):
+    """
+    Parameters
+    -------------
+    var: the hyper parameter you are interested in, eg perplexity, number of neighbours
+    error: a vector containing the error (kl divergence or reconstruction error) for each value of var
+    times: a vector containing the time taken to compute the transformations for each value of var
+    difference: a vector containing the difference in 2d distances for each value of var
+    variable: the name of the variable var, eg 'perplexity'
+    filename: if you want to save the figure, wirte a filename here. 
+    error_type: y label when plotting error, 'kl divergence' og 'reconstructon error'
+    i: The index of var on whihc you want a vertical red line. Default false (no red line)
+    
+     Output
+    -------------
+    A figure, with 3x1 plots 
+    """
     fig = plt.figure(figsize=(20,5))
     ax = fig.add_subplot(131)
     ax.plot(var,error,'go--')
@@ -117,19 +150,6 @@ def plot_error_dist_and_time(var, error,times,difference,variable='variable', fi
     if filename: 
         plt.savefig(filename)
         
-        
-def plot_and_save_tsne(perplexity, filename, Z, per, color):
-    """ usikker på om jeg faktisk bruker denne..  """
-    if np.argwhere(per==perplexity).flatten(): 
-        i=np.argwhere(per==perplexity).flatten()[0]
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.set_title("t-SNE, perplexity=%i" %perplexity)
-        ax.scatter(Z[i][:, 0], Z[i][:, 1], c=color, cmap=plt.cm.Spectral)
-        plt.savefig(filename)
-        plt.show()
-    else: 
-        print('Transformation is not made for this perplexity, availiable perplexities are:', per)
 
 
 def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, images=False, im_thres=3e-3):
@@ -178,24 +198,22 @@ def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, im
     return ax
         
 
-def plot_heatmap(acc_list, algorithm, param1_space, param2_space):
-    """plot heatmap of accuracy with regard to different hyperparameters"""
-    fig, ax = plt.subplots(figsize=(10,8))
-    
-    ax = sns.heatmap(acc_list, cmap="YlGnBu_r", ax=ax)
-    if algorithm == "lle":
-        ax.set_xlabel("regularization term (R)")
-        ax.set_ylabel("number of neighbors (K)")
-    elif algorithm == "tsne":
-        ax.set_xlabel("tolerance (tol)")
-        ax.set_ylabel("perplexity (Perp)")
-    ax.set_xticklabels(param2_space, rotation=90)
-    ax.set_yticklabels(param1_space, rotation=0, va='center')
-    plt.savefig("MNIST_"+ algorithm +"_heatmap")
-    plt.show()
 
-        
 def plot_augmented_swissrolls(Xs, colors, var, variable_name):
+    """ Plots 3D swiss roll 
+    Parameters
+    -------------
+    
+    Xs: a list of the 3D- swiss rolls
+    colors: a list of the corresponding colors
+    var: a vector containing the value of the augmented aspect of the swiss roll (eg noise levels, hole IDs)
+    variable_name: name of the agumented aspect, eg 'noise', 'holes'
+    
+     Output
+    -------------
+    3D plot of each of the datasets in Xs, with correct title
+    
+    """
     fig = plt.figure(figsize=(15,10))
     
     for i in range(len(Xs)):
@@ -210,6 +228,13 @@ def plot_augmented_swissrolls(Xs, colors, var, variable_name):
 
     
 def plot_digits_samples(inputs, row_dim, col_dim):
+    """
+    Parameters
+    -------------
+    
+     Output
+    -------------
+    """
     
     # calculate pixelwidth
     pixel_width = int(np.sqrt(inputs.shape[1]))
