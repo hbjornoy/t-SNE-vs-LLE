@@ -192,7 +192,7 @@ def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, im
             X_trans[i])
             ax.add_artist(imagebox)
     
-    plt.xticks([]), plt.yticks([])
+    #plt.xticks([]), plt.yticks([])
     if title is not None:
         plt.title(title)
     return ax
@@ -252,6 +252,6 @@ def plot_digits_samples(inputs, row_dim, col_dim):
     plt.xticks([])
     plt.yticks([])
     plt.title("Samples from MNIST, handwritten digits")
-    plt.savefig("mnist_examples_of_data.pdf")
+    plt.savefig("images/MNIST_examples_of_data.pdf")
     plt.show()
 

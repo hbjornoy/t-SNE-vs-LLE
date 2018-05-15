@@ -10,6 +10,7 @@ from sklearn.svm import SVC
 from sklearn import metrics
 
 import plot_functions as PL
+from plot_mnist import plot_heatmap
 
 np.random.seed(123)
 
@@ -363,7 +364,7 @@ def n_neighbors(folder=None, modification='',create=False,n_neighbors=np.arange(
 
 
 def n_reg(folder=None, modification='',create=False,reg=np.logspace(-14,10,50), X=None, pkl=True, X_2d_lle=None): 
-     """
+    """
     Function used to generate or load LLE transformations with a range of different regularization term. 
     Parameters
     -------------
@@ -413,7 +414,117 @@ def n_reg(folder=None, modification='',create=False,reg=np.logspace(-14,10,50), 
     r_differences=HL.get_differences(X_2d_lle,r_Y)
     return r_Y,reg, r_times,r_reconstruction_error,r_differences
 
+from sklearn.metrics import f1_score
 
+def kmeans_clustering_f1_measure(inputs, targets, algorithm, grid_width=4, nb_samples=1000, reg_range=(-12, 12), 
+                               neighbor_range=(3,35), min_grad_norm_range=(-4, -1), perplexity_range=(3,100), plot=False,
+                               create=False, folder="mnist_pickles", name="normal", random_state=123):
+    """
+    This function performs manifold fitting and transformation of the input data. Performs kmeans and using only information about clusterlabels from kmeans classifies with Support Vector Classification(SVC). This is done for different parameters in the for of a grid-search. Afterwards the data is stored and plotted as a heatmap if requested. If created before one can load pickle.
+    
+    Parameters
+    -------------
+    inputs: Manifold-embedded data in 2D
+    targets: labels of inputs
+    algorithm: string with name of algorithm, valid input: "lle" and "tsne"
+    grid_width: the number of elements we want to gridsearch from each of the to parameters
+    nb_samples: original MNIST data has 70.000 samples, only use subset to be able to compute
+    reg_range: relevant for LLE, the range of regularization term parameter with logistic range
+    neighbor_range: relevant for LLE, the range of number of neighbors parameter with linear range
+    min_grad_norm_range: relevant for TSNE, the range of min_grad_norm parameter with logistic range
+    perplexity_range: relevant for TSNE, the range of perplexity parameter with linear range
+    plot: whether to plot the heatmap or not
+    create: if true it calculates the kmeans accuracy for every parameter combination and stores it. If false it tries to load one with the same parameters.
+    folder: the folder name to store the pickles
+    name: custom name to append to picklename
+    random_state: seed for stochastic algorihtms
+    
+    Output
+    -------------
+    return_dict: a dictionary with
+        - "acc_list": contains 2D ndarray with accuracy scores for different parameters. row = param1 , col=param2.
+        - "algorithm": the algorihtm of your choosing from parameters
+        - "param1_space": the values of linear parameter for either lle or tsne
+        - "param2_space": the values of logistic parameter for either lle or tsne
+    
+    """
+    if not create:
+        # load pickle
+        d = pickle.load(open(folder+"/F1_"+algorithm+"_grid-"+str(grid_width)+"_samples-"+str(nb_samples)+"_"+name+".pkl", "rb"))
+        # plot heatmap of accuracy with regard to different hyperparameters
+        plot_heatmap(d['f1_list'], d['algorithm'], d['param1_space'], d['param2_space'])
+        # return data from pickled data
+        return d
+    
+    nb_clusters = 10
+    nb_components = 2
+    y_true = targets[0:nb_samples]
+    
+    if algorithm=="lle":
+        # LLE params
+        param1_space = np.linspace(neighbor_range[0], neighbor_range[1], num=grid_width, endpoint=True, dtype=int)
+        param2_space = np.logspace(reg_range[0], reg_range[1], grid_width, endpoint=True)
+    elif algorithm=="tsne":
+        # tsne params
+        param1_space = np.linspace(perplexity_range[0], perplexity_range[1], num=grid_width, endpoint=True, dtype=int)
+        param2_space = np.logspace(min_grad_norm_range[0],min_grad_norm_range[1],grid_width, endpoint=True)
+    else:
+        print("Manifold valid input is either lle or tsne")
+        raise
+        
+    f1_list = np.zeros((grid_width,grid_width))
+    
+    for i, param1 in enumerate(param1_space):
+        for j, param2 in enumerate(param2_space):
+            
+            if algorithm=="lle":
+                mani = manifold.LocallyLinearEmbedding(param1, nb_components, reg=param2,
+                                                       method='standard', random_state=random_state)
+            elif algorithm=="tsne":
+                mani = manifold.TSNE(n_components=2, perplexity = param1, min_grad_norm=param2, 
+                                     n_iter=1000, metric='euclidean', init='random', verbose=0, random_state=random_state)
+                
+            X = mani.fit_transform(inputs[0:nb_samples])
+                
+            # Kmeans
+            kmeans = KMeans(init='k-means++', n_clusters=nb_clusters, random_state=123).fit(X)
+            # Make the kmeans labels the only data to classify upon
+            X = kmeans.labels_[:,np.newaxis]
+            
+            cluster_sizes = list()
+            f1_score = 0
+            # count cluster_sizes
+            for cluster in range(0,10):
+                cluster_sizes.append(sum(cluster==clabel for clabel in kmeans.labels_))
+            # calculate F1-score for clustering by maximizing f1-score for each individual class
+            for digit in range(0,10):
+                digit_size = sum(digit==label for label in y_true)
+                f1_scores = np.zeros(10)
+                for cluster in range(0,10):
+                    nb_correct = sum(y_true[kmeans.labels_==cluster] == digit)
+                    # Check if nb_correct is zero to not divide on zero
+                    if (nb_correct == 0):
+                        f1_scores[cluster] = 0
+                    else:
+                        recall = nb_correct / digit_size
+                        precision = nb_correct / cluster_sizes[cluster]
+                        f1_scores[cluster] = ( (2*recall*precision) / (recall + precision) )
+                f1_score += (digit_size/nb_samples)*np.max(f1_scores)
+            f1_list[i,j] = f1_score            
+            
+    if plot:
+        # plot heatmap of accuracy with regard to different hyperparameters
+        plot_heatmap(f1_list, algorithm, param1_space, param2_space)
+    
+    return_dict = {"f1_list": f1_list, "algorithm": algorithm, "param1_space": param1_space, "param2_space": param2_space}
+    # pickle it
+    pickle.dump(return_dict, open(folder+"/F1_"+algorithm+"_grid-"+str(grid_width)+"_samples-"+str(nb_samples)+"_"+name+".pkl", "wb")) 
+    
+    return return_dict
+
+##########
+########## MUST REMOVE before delivery  #######   #######   #######   #######
+##########
 def kmeans_clustering_accuracy(inputs, targets, algorithm, grid_width=4, nb_samples=1000, reg_range=(-12, 12), 
                                neighbor_range=(3,35), min_grad_norm_range=(-4, -1), perplexity_range=(3,100), plot=False,
                                create=False, folder="mnist_pickles", name="normal", random_state=123):
@@ -450,7 +561,7 @@ def kmeans_clustering_accuracy(inputs, targets, algorithm, grid_width=4, nb_samp
         # load pickle
         d = pickle.load(open(folder+"/"+algorithm+"_grid-"+str(grid_width)+"_samples-"+str(nb_samples)+"_"+name+".pkl", "rb"))
         # plot heatmap of accuracy with regard to different hyperparameters
-        PL.plot_heatmap(d['acc_list'], d['algorithm'], d['param1_space'], d['param2_space'])
+        plot_heatmap(d['acc_list'], d['algorithm'], d['param1_space'], d['param2_space'])
         # return data from pickled data
         return d
     
@@ -498,7 +609,7 @@ def kmeans_clustering_accuracy(inputs, targets, algorithm, grid_width=4, nb_samp
             acc_list[i, j] = metrics.accuracy_score(targets[0:nb_samples], y_pred)
     if plot:
         # plot heatmap of accuracy with regard to different hyperparameters
-        PL.plot_heatmap(acc_list, algorithm, param1_space, param2_space)
+        plot_heatmap(acc_list, algorithm, param1_space, param2_space)
     
     return_dict = {"acc_list": acc_list, "algorithm": algorithm, "param1_space": param1_space, "param2_space": param2_space}
     # pickle it
