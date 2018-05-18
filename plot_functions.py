@@ -6,9 +6,7 @@ from ipywidgets import *
 import pickle
 from matplotlib import offsetbox
 
-
 np.random.seed(123)
-
 
 def plot_inter(color,var,Z,i,variable,transformation,error=None,times=None,difference=None,error_type=None):
     """

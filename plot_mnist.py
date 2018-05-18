@@ -14,7 +14,7 @@ def plot_heatmap(acc_list, algorithm, param1_space, param2_space):
     Output
     -------------
     """
-    fig, ax = plt.subplots(figsize=(10,8))
+    fig, ax = plt.subplots(figsize=(15,15))
     ax = sns.heatmap(acc_list, cmap="YlGnBu_r", ax=ax, cbar_kws={'label': 'F1-score'})
     if algorithm == "lle":
         ax.set_xlabel("regularization term (R)")
