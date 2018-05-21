@@ -10,7 +10,7 @@ from sklearn.svm import SVC
 from sklearn import metrics
 
 import plot_functions as PL
-from plot_mnist import plot_heatmap
+#from plot_mnist import plot_heatmap
 
 np.random.seed(123)
 
@@ -420,7 +420,8 @@ def kmeans_clustering_f1_measure(inputs, targets, algorithm, grid_width=4, nb_sa
                                neighbor_range=(3,35), min_grad_norm_range=(-4, -1), perplexity_range=(3,100), plot=False,
                                create=False, folder="mnist_pickles", name="normal", random_state=123):
     """
-    This function performs manifold fitting and transformation of the input data. Performs kmeans and using only information about clusterlabels from kmeans classifies with Support Vector Classification(SVC). This is done for different parameters in the for of a grid-search. Afterwards the data is stored and plotted as a heatmap if requested. If created before one can load pickle.
+    This function performs manifold fitting and transformation of the input data. Performs kmeans and using only information about clusterlabels from kmeans classifies with Support Vector Classification(SVC). This is done for different parameters in the for of a grid-
+    rch. Afterwards the data is stored and plotted as a heatmap if requested. If created before one can load pickle.
     
     Parameters
     -------------
