@@ -10,7 +10,7 @@ from sklearn.svm import SVC
 from sklearn import metrics
 
 import plot_functions as PL
-#from plot_mnist import plot_heatmap
+from plot_mnist import plot_heatmap
 
 np.random.seed(123)
 
