@@ -8,7 +8,7 @@ from scipy.stats import norm
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils import check_array, check_random_state, shuffle
 from sklearn import datasets 
-
+from math import log10, floor
 
 import plot_functions as PL
 
@@ -18,6 +18,17 @@ from mpl_toolkits.mplot3d import Axes3D
 Axes3D
 
 np.random.seed(123)
+
+def round_sig(x, sig=4):
+    return round(x, sig-int(floor(log10(abs(x))))-1)
+
+
+def round_array(X): 
+    new_x=np.zeros(X.shape)
+    for i, x in enumerate(X): 
+        new_x[i]=round_sig(x)
+    return new_x
+
 
 def import_mnist():
     """

@@ -149,7 +149,6 @@ def plot_error_dist_and_time(var, error,times,difference,variable='variable', fi
         plt.savefig(filename)
         
 
-
 def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, images=False, im_thres=3e-3):
     """
     Plots the manifold embedding with the some of the original images across the data.
@@ -161,6 +160,21 @@ def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, im
     #          Gael Varoquaux
     # License: BSD 3 clause (C) INRIA 2011
     """
+    
+    
+    SMALL_SIZE = 15
+    MEDIUM_SIZE = 25
+    BIGGER_SIZE = 30
+
+    plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+    plt.rc('axes', titlesize=SMALL_SIZE)     # fontsize of the axes title
+    plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
+    plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+    plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+    plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
+    plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
+
+
     x_min, x_max = np.min(X_trans, 0), np.max(X_trans, 0)
     # multiplied scalar to the range to get the point away from the plot range
     X_trans = ((X_trans - x_min) / ((x_max - x_min)*1.1))+0.05
