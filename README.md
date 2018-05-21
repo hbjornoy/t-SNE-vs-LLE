@@ -60,4 +60,4 @@ We invite the reader to explore all of the notebooks. All notebooks from section
 - mnist
 - Data
 
-The fist 6 contains pickles of LLE and t-SNE transformations, while the last two contains our datasets. 
+The first 6 contains pickles of LLE and t-SNE transformations, while the last two contains our datasets. 
