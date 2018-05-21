@@ -1,6 +1,5 @@
-# SNE-vs-T-SNE
-## Project in Advanced Machine Learning, MICRO-570, EPFL, Lausanne
-## Håvard Bjørnøy and Hedda H. B. Vik
+#### Project in Advanced Machine Learning, MICRO-570, EPFL, Lausanne
+#### Håvard Bjørnøy and Hedda H. B. Vik
 
 # Comparison of the Stochastic Neighbor Embedding(SNE) and t-distributed Stochastic Neighbourhood Embedding (t-SNE). 
 
@@ -26,7 +25,7 @@ This repository contains the following items:
 - pickle_functions.py
 - plot_functions.py
 - plot_mnist.py
-To run main.py, please do the following steps: 
+\nTo run main.py, please do the following steps: 
 	1. Install requirements
 	2. Make sure that you have all files belonging to the original Zip file in their original place. 
 	3. Run main.py from its original place
@@ -39,7 +38,7 @@ To run main.py, please do the following steps:
 - Section_III_E.ipynb
 - Section_III_F.ipynb
 - Section_IV.ipynb
-We invite the reader to explore all of the notebooks. All notebooks from section III contains interesting interactive plots. 
+\nWe invite the reader to explore all of the notebooks. All notebooks from section III contains interesting interactive plots. 
 
 #### Folders:
 - SectionB
@@ -50,4 +49,4 @@ We invite the reader to explore all of the notebooks. All notebooks from section
 - mnist_pickles
 - mnist
 - Data
-The fist 6 contains pickles of LLE and t-SNE transformations, while the last two contains our datasets. 
+\nThe fist 6 contains pickles of LLE and t-SNE transformations, while the last two contains our datasets. 
