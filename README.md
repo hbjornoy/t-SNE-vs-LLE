@@ -4,6 +4,11 @@
 # Comparison of the Stochastic Neighbor Embedding(SNE) and t-distributed Stochastic Neighbourhood Embedding (t-SNE). 
 This repository contains a project in Advanced Machine Learning, MICRO-570 at EPFL. 
 
+To run main.py, please do the following steps: 
+	1 Install requirements
+	2 Make sure that you have all files belonging to the original Zip file in their original place. 
+	3 Run main.py from its original place
+	4 You must exit a plot-window before pressing enter in the terminal for it to work properly.
 
 ### Imports: 
 The flowing libraries are used in this project: 
@@ -33,12 +38,6 @@ This repository contains the following items:
 	* Contains functions used to make plots
 - plot_mnist.py
 	* Contains a function used to plot MNIST
-
-To run main.py, please do the following steps: 
-	1. Install requirements
-	2. Make sure that you have all files belonging to the original Zip file in their original place. 
-	3. Run main.py from its original place
-	4. You must exit a plot-window before pressing enter in the terminal for it to work properly.
 	
 #### Jupyter notebooks: 
 - Section_III_B-1.ipynb
