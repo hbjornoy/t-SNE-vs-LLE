@@ -1,7 +1,7 @@
 #### Project in Advanced Machine Learning, MICRO-570, EPFL, Lausanne
 #### Håvard Bjørnøy and Hedda H. B. Vik
 
-# Comparison of the Stochastic Neighbor Embedding(SNE) and t-distributed Stochastic Neighbourhood Embedding (t-SNE). 
+# Comparison of the Locally Linear Embedding (LLE) and t-distributed Stochastic Neighbourhood Embedding (t-SNE). 
 This repository contains a project in Advanced Machine Learning, MICRO-570 at EPFL. 
 
 To run ``main.py``, please do the following steps: 
