@@ -5,10 +5,10 @@
 This repository contains a project in Advanced Machine Learning, MICRO-570 at EPFL. 
 
 To run main.py, please do the following steps: 
-Markup:	1. Install requirements
-	2. Make sure that you have all files belonging to the original Zip file in their original place. 
-	3. Run main.py from its original place
-	4. You must exit a plot-window before pressing enter in the terminal for it to work properly.
+1. Install requirements
+2. Make sure that you have all files belonging to the original Zip file in their original place. 
+3. Run main.py from its original place
+4. You must exit a plot-window before pressing enter in the terminal for it to work properly.
 
 ### Imports: 
 The flowing libraries are used in this project: 
