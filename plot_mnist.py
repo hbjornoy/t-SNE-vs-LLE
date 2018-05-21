@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 import helpers as HL
+
 SMALL_SIZE = 15
 MEDIUM_SIZE = 25
 BIGGER_SIZE = 30
@@ -21,9 +22,11 @@ def plot_heatmap(acc_list, algorithm, param1_space, param2_space):
   
     Parameters
     -------------
+    acc_list: a matrix with the values of f1-scores to plot in a heatmap with param1_space and param2_space on the axis
+    algorithm: either "lle" or "tsne"
+    param1_space: the most important hyperparam and linear data. lle -> number of neighbors, tsne -> perplexity
+    param2_space: the less important hyperparam and logistic data. lle -> regularization, tsne -> min_grad_norm
     
-    Output
-    -------------
     """
     fig, ax = plt.subplots(figsize=(10,8))
     ax = sns.heatmap(acc_list, cmap="YlGnBu_r", ax=ax, cbar_kws={'label': 'F1-score'})

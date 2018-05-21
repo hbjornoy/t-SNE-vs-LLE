@@ -152,6 +152,7 @@ def plot_error_dist_and_time(var, error,times,difference,variable='variable', fi
 def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, images=False, im_thres=3e-3):
     """
     Plots the manifold embedding with the some of the original images across the data.
+    
     Strongly inspired and based on sklearn docs examples:
     http://scikit-learn.org/stable/auto_examples/manifold/plot_lle_digits.html
     # Authors: Fabian Pedregosa <fabian.pedregosa@inria.fr>
@@ -159,6 +160,22 @@ def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, im
     #          Mathieu Blondel <mathieu@mblondel.org>
     #          Gael Varoquaux
     # License: BSD 3 clause (C) INRIA 2011
+    
+    Parameters
+    -------------
+    
+    X_orig: original data to be able to print its pictures (nb_samples, pixels)
+    X_trans: transformed data (nb_samples, nb_components=2)
+    y: labels for inputdata to print numbers as colors
+    title: title of plot
+    fig: matplotlib figure object
+    subplot_pos: (three-digit integer) symbolizes position in subplot. Look at matplotlib documentation for subplots for more.
+    images: (boolean) if you want to have images sporadically over your plot
+    im_thres: (float) if images enabled, how far abort should they pop up
+    
+     Output
+    -------------
+    ax of plot with colored classes and possible pictures
     """
     
     
@@ -173,7 +190,7 @@ def plot_embedding(X_orig, X_trans, y, title=None, fig=None, subplot_pos=111, im
     plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
     plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
     plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
-
+    
 
     x_min, x_max = np.min(X_trans, 0), np.max(X_trans, 0)
     # multiplied scalar to the range to get the point away from the plot range
@@ -236,17 +253,18 @@ def plot_augmented_swissrolls(Xs, colors, var, variable_name):
             ax.set_title( var[i] +'-distributed points')
         else: 
             ax.set_title(variable_name+': %1.2f' %var[i])
-    plt.tight_layout()
     plt.show()
 
     
 def plot_digits_samples(inputs, row_dim, col_dim):
     """
+    This function plots the first samples of pictures in picture format
+    
     Parameters
     -------------
-    
-     Output
-    -------------
+    inputs: data from MNIST dataset in the form (nb_samples, pixels)
+    row_dim: (int) how many rows of picture you want to print
+    col_dim: (int) how many col of picture you want to print
     """
     
     # calculate pixelwidth

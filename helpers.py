@@ -20,10 +20,12 @@ Axes3D
 np.random.seed(123)
 
 def round_sig(x, sig=4):
+    """numerical manipulation for stylistic purpose"""
     return round(x, sig-int(floor(log10(abs(x))))-1)
 
 
 def round_array(X): 
+    """numerical manipulation for stylistic purpose"""
     new_x=np.zeros(X.shape)
     for i, x in enumerate(X): 
         new_x[i]=round_sig(x)
@@ -32,9 +34,10 @@ def round_array(X):
 
 def import_mnist():
     """
-    
      Output
     -------------
+    inputs: shape(70000, 784) where the dimensions are (nb_samples, pixels)
+    targets: shape(70000) (labels)
     """
     #import data
     digits = datasets.fetch_mldata('MNIST original', data_home="mnist")
@@ -87,7 +90,7 @@ def make_swissroll(n=1000, noise=0.1, nb_holes=0, sigma=0.4, threshold=False, ra
 
 
 def make_2d_data(n, generator, distribution):
-    """ generate a 2d dataset, sampled according to 'distibution'"""
+    """ generate a 2d dataset, sampled according to 'distribution'"""
     if distribution=='uniform': 
         vector1=generator.rand(1, n)
         vector2=generator.rand(1, n)
@@ -131,7 +134,6 @@ def plot_2d(data,color):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.scatter(data[0], data[1],c=color, cmap=plt.cm.Spectral)
-    plt.tight_layout()
 
 
 def plot_3d(data, color):
@@ -142,12 +144,12 @@ def plot_3d(data, color):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(data[:,0], data[:,1], data[:,2], c=color, cmap=plt.cm.Spectral)
-    plt.tight_layout()
     plt.show()
     
 
 def keep_points(distance, sigma, threshold=False):
-    """ Returns False if point is to be removed, True otherwise
+    """ 
+    Returns False if point is to be removed, True otherwise
     distance: a vector of distances to a given point. 
     sigma: variance of the gaussian
     threshold: if a value is given, then all distances that have a higher probability than threshold to be removed, 
@@ -198,9 +200,12 @@ def get_differences(X_2d,trans):
     """
     Parameters
     -------------
+    X_2d: np.ndarray, input 2d-data in the format of (positions,1, nb_samples)
+    trans: np.ndarray, transformed array in the format of (nb_samples, positions)
     
     Output
     -------------
+    differences: np.array with as a length of nb_samples. It contains differences in 2d space from original position before transformation compared to after transfomration.
     """
     dist_mat_true = euclidean_distances(np.squeeze(X_2d).T,np.squeeze(X_2d).T)
     scaled_dist_mat_true=(dist_mat_true -np.min(dist_mat_true ))/(np.max(dist_mat_true )-np.min(dist_mat_true ))
