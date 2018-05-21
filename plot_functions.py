@@ -236,6 +236,7 @@ def plot_augmented_swissrolls(Xs, colors, var, variable_name):
             ax.set_title( var[i] +'-distributed points')
         else: 
             ax.set_title(variable_name+': %1.2f' %var[i])
+    plt.tight_layout()
     plt.show()
 
     

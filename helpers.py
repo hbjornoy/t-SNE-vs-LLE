@@ -131,6 +131,7 @@ def plot_2d(data,color):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.scatter(data[0], data[1],c=color, cmap=plt.cm.Spectral)
+    plt.tight_layout()
 
 
 def plot_3d(data, color):
@@ -141,6 +142,7 @@ def plot_3d(data, color):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(data[:,0], data[:,1], data[:,2], c=color, cmap=plt.cm.Spectral)
+    plt.tight_layout()
     plt.show()
     
 
