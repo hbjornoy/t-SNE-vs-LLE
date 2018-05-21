@@ -17,10 +17,10 @@ Jupyter notebooks:
 
 - Section III B-1
 - Section III B-2
-- Section C
-- Section D
-- Section E
-- Section F
+- Section III C
+- Section III D
+- Section III E
+- Section III F
 
 python files: 
 
