@@ -485,32 +485,40 @@ def kmeans_clustering_f1_measure(inputs, targets, algorithm, grid_width=4, nb_sa
                                      n_iter=1000, metric='euclidean', init='random', verbose=0, random_state=random_state)
                 
             X = mani.fit_transform(inputs[0:nb_samples])
-                
-            # Kmeans
-            kmeans = KMeans(init='k-means++', n_clusters=nb_clusters, random_state=123).fit(X)
-            # Make the kmeans labels the only data to classify upon
-            X = kmeans.labels_[:,np.newaxis]
             
-            cluster_sizes = list()
-            f1_score = 0
-            # count cluster_sizes
-            for cluster in range(0,10):
-                cluster_sizes.append(sum(cluster==clabel for clabel in kmeans.labels_))
-            # calculate F1-score for clustering by maximizing f1-score for each individual class
-            for digit in range(0,10):
-                digit_size = sum(digit==label for label in y_true)
-                f1_scores = np.zeros(10)
+            # calculate F1-score for 10 different kmeans with different seeds from 0 to 10 then average scores
+            # this is to deminish the effect of kmeans initialization
+            kmeans_f1s = 0
+            number_of_seeds = 10
+            for seed in range(0,number_of_seeds):
+
+                # Kmeans
+                kmeans = KMeans(init='random', n_clusters=nb_clusters, random_state=seed).fit(X)
+                # Make the kmeans labels the only data to classify upon
+                X = kmeans.labels_[:,np.newaxis]
+
+                cluster_sizes = list()
+                f1_score = 0
+                # count cluster_sizes
                 for cluster in range(0,10):
-                    nb_correct = sum(y_true[kmeans.labels_==cluster] == digit)
-                    # Check if nb_correct is zero to not divide on zero
-                    if (nb_correct == 0):
-                        f1_scores[cluster] = 0
-                    else:
-                        recall = nb_correct / digit_size
-                        precision = nb_correct / cluster_sizes[cluster]
-                        f1_scores[cluster] = ( (2*recall*precision) / (recall + precision) )
-                f1_score += (digit_size/nb_samples)*np.max(f1_scores)
-            f1_list[i,j] = f1_score            
+                    cluster_sizes.append(sum(cluster==clabel for clabel in kmeans.labels_))
+
+                # calculate F1-score for clustering by maximizing f1-score for each individual class
+                for digit in range(0,10):
+                    digit_size = sum(digit==label for label in y_true)
+                    f1_scores = np.zeros(10)
+                    for cluster in range(0,10):
+                        nb_correct = sum(y_true[kmeans.labels_==cluster] == digit)
+                        # Check if nb_correct is zero to not divide on zero
+                        if (nb_correct == 0):
+                            f1_scores[cluster] = 0
+                        else:
+                            recall = nb_correct / digit_size
+                            precision = nb_correct / cluster_sizes[cluster]
+                            f1_scores[cluster] = ( (2*recall*precision) / (recall + precision))
+                    f1_score += (digit_size/nb_samples)*np.max(f1_scores)
+                kmeans_f1s += f1_score
+            f1_list[i,j] = kmeans_f1s/number_of_seeds          
             
     if plot:
         # plot heatmap of accuracy with regard to different hyperparameters
