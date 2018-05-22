@@ -16,7 +16,7 @@ The following programs and libraries are used in this project:
 - Python 3.6.1
 	* probably works with later versions, if not install via https://www.python.org/downloads/release/python-361/
 - numpy
-	* ``pip install numpy
+	* ``pip install numpy``
 - sklearn
 	* ``pip install scikit-learn``
 - seaborn
@@ -30,7 +30,7 @@ The following programs and libraries are used in this project:
 - time 
 	* A part of standard Python 3.6.1
 - mpl_toolkits
-	* if it doesnt recognise module, then upgrade matplotlib with: ``pip install --upgrade matplotlib``
+	* If compiler does not recognise module, then upgrade matplotlib with: ``pip install --upgrade matplotlib``
 
 if you do not have pip, get pip by following these instructions:
 	* https://pip.pypa.io/en/stable/installing/
@@ -42,7 +42,7 @@ In addition, we have the following import:
 ### Content: 
 This repository contains the following items: 
 #### PDFs:
-- Report.pdf: The report. 
+- Report.pdf : The report. 
 #### Python files: 
 - ``main.py``
 	* A summary of everything that is done in this project. 
