@@ -4,24 +4,40 @@
 # Comparison of the Locally Linear Embedding (LLE) and t-distributed Stochastic Neighbourhood Embedding (t-SNE). 
 This repository contains a project in Advanced Machine Learning, MICRO-570 at EPFL. 
 
-To run ``main.py``, please do the following steps: 
-1. Install requirements
+To run ``main.py``, please do the following: 
+1. If needed, install requirements (se 'Installments')
 2. Make sure that you have all files belonging to the original Zip file in their original place. 
 3. Run ``main.py`` from its original place
 4. You must exit a plot-window before pressing enter in the terminal for it to work properly.
 
-### Imports: 
-The flowing libraries are used in this project: 
+
+### Installments: 
+The following programs and libraries are used in this project: 
+- Python 3.6.1
+	* probably works with later versions, if not install via https://www.python.org/downloads/release/python-361/
 - numpy
+	* ``pip install numpy
 - sklearn
+	* ``pip install scikit-learn``
 - seaborn
-- ipywidgets
-- pickle
+	* ``pip install seaborn``
 - matplotlib
+	* ``pip install matplotlib``
+- ipywidgets
+	* ``pip install ipywidgets``
+- pickle
+	* A part of standard Python 3.6.1
 - time 
+	* A part of standard Python 3.6.1
+- mpl_toolkits
+	* if it doesnt recognise module, then upgrade matplotlib with: ``pip install --upgrade matplotlib``
+
+if you do not have pip, get pip by following these instructions:
+	* https://pip.pypa.io/en/stable/installing/
 
 In addition, we have the following import: 
 - ``from mpl_toolkits.mplot3d import Axes3D``
+
 
 ### Content: 
 This repository contains the following items: 
